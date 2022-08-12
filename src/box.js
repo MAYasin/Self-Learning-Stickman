@@ -7,6 +7,7 @@ function Box(x, y, w, h, ground, options) {
     this.ground = ground;
     this.collided = false;
     this.angle = this.body.angle;
+    this.angularSpeed = this.body.angularSpeed;
     this.angleInDegree = (360 - degrees(this.angle) + 360 + 90) % 360;
     this.distanceToGround = 0;
 
@@ -14,6 +15,7 @@ function Box(x, y, w, h, ground, options) {
 
     this.show = function () {
         var pos = this.body.position;
+        this.angularSpeed = this.body.angularSpeed;
         this.angle = this.body.angle;
         this.angleInDegree = (360 - degrees(this.angle) + 360 + 90) % 360;
 

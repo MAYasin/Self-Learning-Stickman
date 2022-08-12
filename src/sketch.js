@@ -91,7 +91,7 @@ function draw() {
     text(modetext, 10, 40);
     stickman.update();
 
-    console.log(stickman.dead);
+    //console.log(stickman.dead);
 
     for (const bound of bounds) {
         bound.show();

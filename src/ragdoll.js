@@ -87,7 +87,7 @@ class Ragdoll {
         this.lleg.show();
         this.head.show();
 
-        //console.log(this.lleg.distanceToGround);
+        //console.log(this.lleg.angularSpeed);
 
         if(this.head.collided || this.torso.collided) {
             this.dead = true;
