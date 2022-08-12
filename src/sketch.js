@@ -6,6 +6,7 @@ var Engine = Matter.Engine,
     Body = Matter.Body,
     Common = Matter.Common,
     Composite = Matter.Composite,
+    Collision = Matter.Collision,
     Mouse = Matter.Mouse,
     MouseConstraint = Matter.MouseConstraint,
     Constraint = Matter.Constraint;
@@ -48,8 +49,6 @@ function setup() {
     });
 
     world = engine.world;
-    modetext = "Idle";
-    stickman = new Ragdoll(300, 200);
 
     // run the renderer
     Render.run(render);
@@ -62,7 +61,11 @@ function setup() {
         isStatic: true,
     }
     //ground
-    bounds.push(new Boundary(width / 2, height, width, width / 6));
+    var ground = new Boundary(width / 2, height, width, width / 6);
+    bounds.push(ground);
+
+    modetext = "Idle";
+    stickman = new Ragdoll(300, 200, ground);
     //walls
     bounds.push(new Boundary(0, height / 2, 20, height));
     bounds.push(new Boundary(width, height / 2, 20, height));
@@ -87,6 +90,8 @@ function draw() {
     strokeWeight(0);
     text(modetext, 10, 40);
     stickman.update();
+
+    console.log(stickman.dead);
 
     for (const bound of bounds) {
         bound.show();

@@ -1,7 +1,8 @@
 class Ragdoll {
-    constructor(x, y) {
+    constructor(x, y, ground) {
         this.x = x;
         this.y = y;
+        this.dead = false;
 
         var customOption = Common.extend({
             collisionFilter: {
@@ -9,15 +10,15 @@ class Ragdoll {
             }
         });
 
-        this.torso = new Box(this.x, this.y, 20, 60, customOption);
+        this.torso = new Box(this.x, this.y, 20, 60, ground, customOption);
 
-        this.head = new Head(this.x, this.y - 50, 18, customOption);
+        this.head = new Head(this.x, this.y - 50, 18, ground, customOption);
 
-        this.rhand = new Box(this.x + 25, this.y - 10, 30, 4, customOption);
-        this.lhand = new Box(this.x - 25, this.y - 10, 30, 4, customOption);
+        this.rhand = new Box(this.x + 25, this.y - 10, 30, 4, ground, customOption);
+        this.lhand = new Box(this.x - 25, this.y - 10, 30, 4, ground, customOption);
 
-        this.rleg = new Box(this.x + 10, this.y + 50, 8, 40, customOption);
-        this.lleg = new Box(this.x - 10, this.y + 50, 8, 40, customOption);
+        this.rleg = new Box(this.x + 10, this.y + 50, 8, 40, ground, customOption);
+        this.lleg = new Box(this.x - 10, this.y + 50, 8, 40, ground, customOption);
 
         this.torsoToHead = Constraint.create({
             bodyA: this.torso.body,
@@ -85,6 +86,14 @@ class Ragdoll {
         this.rleg.show();
         this.lleg.show();
         this.head.show();
+
+        //console.log(this.lleg.distanceToGround);
+
+        if(this.head.collided || this.torso.collided) {
+            this.dead = true;
+        }else{
+            this.dead = false;
+        }
     }
 
     removeFromWorld() {
