@@ -11,7 +11,7 @@ class Ragdoll {
 
         this.torso = new Box(this.x, this.y, 20, 60, customOption);
 
-        this.head = new Head(this.x, this.y - 50, 20, customOption);
+        this.head = new Head(this.x, this.y - 50, 10, customOption);
 
         this.rhand = new Box(this.x + 25, this.y - 10, 30, 4, customOption);
         this.lhand = new Box(this.x - 25, this.y - 10, 30, 4, customOption);
@@ -24,7 +24,7 @@ class Ragdoll {
             bodyB: this.head.body,
             pointA: { x: 0, y: -30 },
             pointB: { x: 0, y: 20 },
-            stiffness: 0.01,
+            stiffness: 1,
         });
 
         this.torsoToRhand = Constraint.create({
