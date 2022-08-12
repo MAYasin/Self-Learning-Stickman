@@ -1,5 +1,5 @@
 function Head(x, y, r) {
-    this.body = Bodies.circle(x, y, r, { isStatic: false });
+    this.body = Bodies.circle(x, y, r, { isStatic: false, density: 0.0001 });
     this.x = x;
     this.y = y;
     this.r = r;

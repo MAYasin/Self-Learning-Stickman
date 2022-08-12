@@ -11,7 +11,7 @@ class Ragdoll {
 
         this.torso = new Box(this.x, this.y, 20, 60, customOption);
 
-        this.head = new Head(this.x, this.y - 50, 10, customOption);
+        this.head = new Head(this.x, this.y - 50, 18, customOption);
 
         this.rhand = new Box(this.x + 25, this.y - 10, 30, 4, customOption);
         this.lhand = new Box(this.x - 25, this.y - 10, 30, 4, customOption);
@@ -24,6 +24,14 @@ class Ragdoll {
             bodyB: this.head.body,
             pointA: { x: 0, y: -30 },
             pointB: { x: 0, y: 20 },
+            stiffness: 1,
+        });
+
+        this.torsoToHeadA = Constraint.create({
+            bodyA: this.torso.body,
+            bodyB: this.head.body,
+            pointA: { x: 0, y: 0 },
+            pointB: { x: 0, y: 0 },
             stiffness: 1,
         });
 
@@ -64,7 +72,7 @@ class Ragdoll {
         });
 
         this.fullbody = Composite.add(world, [
-            this.torsoToHead, this.torsoToRhand, this.torsoToLhand, this.torsoToRleg, this.torsoToLleg, this.legToLeg
+            this.torsoToHead, this.torsoToHeadA, this.torsoToRhand, this.torsoToLhand, this.torsoToRleg, this.torsoToLleg, this.legToLeg
         ]
         );
     }
@@ -80,6 +88,6 @@ class Ragdoll {
     }
 
     removeFromWorld() {
-        Composite.remove(world, [this.torso.body, this.head.body, this.rhand.body, this.lhand.body, this.rleg.body, this.lleg.body, this.torsoToHead, this.torsoToRhand, this.torsoToLhand, this.torsoToRleg, this.torsoToLleg, this.legToLeg])
+        Composite.remove(world, [this.torso.body, this.head.body, this.rhand.body, this.lhand.body, this.rleg.body, this.lleg.body, this.torsoToHead, this.torsoToHeadA, this.torsoToRhand, this.torsoToLhand, this.torsoToRleg, this.torsoToLleg, this.legToLeg])
     }
 }
