@@ -19,6 +19,7 @@ var bounds = [];
 
 let img;
 let modetext;
+let ground;
 function preload() {
     img = loadImage("assets/landscape.jpg");
 }
@@ -61,11 +62,11 @@ function setup() {
         isStatic: true,
     }
     //ground
-    var ground = new Boundary(width / 2, height, width, width / 6);
+    ground = new Boundary(width / 2, height, width, width / 6);
     bounds.push(ground);
 
     modetext = "Idle";
-    stickman = new Ragdoll(300, 200, ground);
+    stickman = new Ragdoll(80, 200, ground);
     //walls
     bounds.push(new Boundary(0, height / 2, 20, height));
     bounds.push(new Boundary(width, height / 2, 20, height));
@@ -107,7 +108,7 @@ function train() {
 function resetSketch() {
     modetext = "Idle";
     stickman.removeFromWorld();
-    stickman = new Ragdoll(300, 200);
+    stickman = new Ragdoll(80, 200, ground);
 }
 
 function inference() {
