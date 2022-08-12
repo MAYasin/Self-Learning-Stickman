@@ -4,16 +4,19 @@ function Box(x, y, w, h, options) {
     this.y = y
     this.w = w;
     this.h = h;
+    this.angle = this.body.angle;
+    this.angleInDegree = (360 - degrees(this.angle) + 360 + 90) % 360
 
     Composite.add(world, this.body);
 
     this.show = function () {
         var pos = this.body.position;
-        var angle = this.body.angle;
+        this.angle = this.body.angle;
+        this.angleInDegree = (360 - degrees(this.angle) + 360 + 90) % 360
 
         push();
         translate(pos.x, pos.y);
-        rotate(angle);
+        rotate(this.angle);
         rectMode(CENTER);
         strokeWeight(2);
         stroke(0);
