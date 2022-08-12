@@ -24,7 +24,7 @@ class Ragdoll {
             bodyA: this.torso.body,
             bodyB: this.head.body,
             pointA: { x: 0, y: -30 },
-            pointB: { x: 0, y: 20 },
+            pointB: { x: 0, y: 18 },
             stiffness: 1,
         });
 
