@@ -1,0 +1,29 @@
+{
+  "name": "self-learning-stickman",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MAYasin/Self-Learning-Stickman.git"
+  },
+  "keywords": [
+    "AI",
+    "machine learning",
+    "javascript"
+  ],
+  "author": "Muhammad Aman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MAYasin/Self-Learning-Stickman/issues"
+  },
+  "homepage": "https://github.com/MAYasin/Self-Learning-Stickman#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "nodemon": "^2.0.19"
+  }
+}
