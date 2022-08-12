@@ -1,5 +1,5 @@
-function Head(x, y, r, ground) {
-    this.body = Bodies.circle(x, y, r, { isStatic: false, density: 0.0001 });
+function Head(x, y, r, ground, customOption) {
+    this.body = Bodies.circle(x, y, r, { isStatic: false, density: 0.0001, collisionFilter: customOption.collisionFilter});
     this.x = x;
     this.y = y;
     this.r = r;

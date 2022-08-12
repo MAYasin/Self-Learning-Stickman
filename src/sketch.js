@@ -20,6 +20,7 @@ var bounds = [];
 let img;
 let modetext;
 let ground;
+let customOption;
 function preload() {
     img = loadImage("assets/landscape.jpg");
 }
@@ -65,8 +66,15 @@ function setup() {
     ground = new Boundary(width / 2, height, width, width / 6);
     bounds.push(ground);
 
+    customOption = {
+        collisionFilter: {
+            group: Body.nextGroup(true),
+        }
+    };
+
     modetext = "Idle";
-    stickman = new Ragdoll(80, 200, ground);
+    stickman = new Ragdoll(80, 200, ground, customOption);
+    stickman2 = new Ragdoll(120, 200, ground,customOption);
     //walls
     bounds.push(new Boundary(0, height / 2, 20, height));
     bounds.push(new Boundary(width, height / 2, 20, height));
@@ -91,6 +99,7 @@ function draw() {
     strokeWeight(0);
     text(modetext, 10, 40);
     stickman.update();
+    stickman2.update();
 
     //console.log(stickman.dead);
 
@@ -108,7 +117,7 @@ function train() {
 function resetSketch() {
     modetext = "Idle";
     stickman.removeFromWorld();
-    stickman = new Ragdoll(80, 200, ground);
+    stickman = new Ragdoll(80, 200, ground, customOption);
 }
 
 function inference() {

@@ -1,14 +1,8 @@
 class Ragdoll {
-    constructor(x, y, ground) {
+    constructor(x, y, ground, customOption) {
         this.x = x;
         this.y = y;
         this.dead = false;
-
-        var customOption = Common.extend({
-            collisionFilter: {
-                group: Body.nextGroup(true)
-            }
-        });
 
         this.torso = new Box(this.x, this.y, 20, 60, ground, customOption);
 
