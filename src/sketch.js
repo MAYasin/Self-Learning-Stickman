@@ -98,7 +98,7 @@ function draw() {
     strokeWeight(0);
     text(modetext, 10, 40);
 
-    stickman.control(0.1, 0.1);
+    //stickman.control(0.1, 0.1);
     stickman.update();
 
     //console.log(stickman.dead);

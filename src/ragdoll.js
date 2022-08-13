@@ -76,6 +76,9 @@ class Ragdoll {
 
     control(rotateLleg, rotateRleg) {
         if (!this.dead) {
+            rotateRleg = rotateRleg/Math.pow(10, 1);
+            rotateLleg = rotateLleg/Math.pow(10, 1);
+
             var xRval = (this.rleg.body.vertices[0].x + this.rleg.body.vertices[1].x) / 2;
             var yRval = (this.rleg.body.vertices[0].y + this.rleg.body.vertices[1].y) / 2;
             Body.rotate(this.rleg.body, rotateRleg, { x: xRval, y: yRval });
@@ -109,6 +112,7 @@ class Ragdoll {
             const outputs = NeuralNetwork.feedForward([this.lleg.angle, this.lleg.angularSpeed, this.lleg.collided ? 1 : 0, this.lleg.distanceToGround, this.torso.angle, this.rleg.angle, this.rleg.angularSpeed, this.rleg.collided ? 1 : 0, this.rleg.distanceToGround], this.brain)
             console.log(this.brain.layers[0].inputs);
             console.log(outputs);
+            this.control(outputs[0], outputs[1]);
         }
 
         this.torso.show();
