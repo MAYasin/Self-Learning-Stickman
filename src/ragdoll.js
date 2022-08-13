@@ -4,6 +4,8 @@ class Ragdoll {
         this.y = y;
         this.dead = false;
 
+        this.brain = new NeuralNetwork([9, 8, 2]);
+
         this.torso = new Box(this.x, this.y, 20, 60, ground, customOption);
 
         this.head = new Head(this.x, this.y - 50, 18, ground, customOption);
@@ -101,6 +103,12 @@ class Ragdoll {
             this.lhand.color = 0;
             this.rleg.color = 0;
             this.lleg.color = 0;
+        }
+
+        if (!this.dead) {
+            const outputs = NeuralNetwork.feedForward([this.lleg.angle, this.lleg.angularSpeed, this.lleg.collided ? 1 : 0, this.lleg.distanceToGround, this.torso.angle, this.rleg.angle, this.rleg.angularSpeed, this.rleg.collided ? 1 : 0, this.rleg.distanceToGround], this.brain)
+            console.log(this.brain.layers[0].inputs);
+            console.log(outputs);
         }
 
         this.torso.show();

@@ -18,7 +18,7 @@ class NeuralNetwork {
 }
 
 class Layer {
-    contructor(inputSize, outputSize) {
+    constructor(inputSize, outputSize) {
         this.inputs = new Array(inputSize);
         this.outputs = new Array(outputSize);
         this.biases = new Array(outputSize);
@@ -54,11 +54,10 @@ class Layer {
             for (let j = 0; j < layer.inputs.length; j++) {
                 sum += layer.inputs[j] * layer.weights[j][i];
             }
-
             if (sum > layer.biases[i]) {
-                layer.output[i] = 1;
+                layer.outputs[i] = 1;
             } else {
-                layer.output[i] = 0
+                layer.outputs[i] = 0
             }
         }
 
