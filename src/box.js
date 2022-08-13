@@ -8,8 +8,8 @@ function Box(x, y, w, h, ground, options) {
     this.collided = false;
     this.angle = this.body.angle;
     this.angularSpeed = this.body.angularSpeed;
-    this.angleInDegree = (360 - degrees(this.angle) + 360 + 90) % 360;
     this.distanceToGround = 0;
+    this.color = 255;
 
     Composite.add(world, this.body);
 
@@ -17,7 +17,6 @@ function Box(x, y, w, h, ground, options) {
         var pos = this.body.position;
         this.angularSpeed = this.body.angularSpeed;
         this.angle = this.body.angle;
-        this.angleInDegree = (360 - degrees(this.angle) + 360 + 90) % 360;
 
         var collision = Collision.collides(this.body, this.ground.body);
         if (collision !== null) {
@@ -34,7 +33,7 @@ function Box(x, y, w, h, ground, options) {
         rectMode(CENTER);
         strokeWeight(2);
         stroke(0);
-        fill(255);
+        fill(this.color);
         rect(0, 0, this.w, this.h);
         pop();
     }

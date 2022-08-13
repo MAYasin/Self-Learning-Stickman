@@ -72,7 +72,37 @@ class Ragdoll {
         );
     }
 
+    control(rotateLleg, rotateRleg) {
+        if (!this.dead) {
+            var xRval = (this.rleg.body.vertices[0].x + this.rleg.body.vertices[1].x) / 2;
+            var yRval = (this.rleg.body.vertices[0].y + this.rleg.body.vertices[1].y) / 2;
+            Body.rotate(this.rleg.body, rotateRleg, { x: xRval, y: yRval });
+
+            var xLval = (this.lleg.body.vertices[0].x + this.lleg.body.vertices[1].x) / 2;
+            var yLval = (this.lleg.body.vertices[0].y + this.lleg.body.vertices[1].y) / 2;
+            Body.rotate(this.lleg.body, rotateLleg, { x: xLval, y: yLval });
+        }
+    }
+
     update() {
+        if (this.head.collided || this.torso.collided) {
+            this.dead = true;
+
+            this.torso.body.isStatic = true;
+            this.head.body.isStatic = true;
+            this.rhand.body.isStatic = true;
+            this.lhand.body.isStatic = true;
+            this.rleg.body.isStatic = true;
+            this.lleg.body.isStatic = true;
+
+            this.torso.color = 0;
+            this.head.color = 0;
+            this.rhand.color = 0;
+            this.lhand.color = 0;
+            this.rleg.color = 0;
+            this.lleg.color = 0;
+        }
+
         this.torso.show();
 
         this.rhand.show();
@@ -80,14 +110,6 @@ class Ragdoll {
         this.rleg.show();
         this.lleg.show();
         this.head.show();
-
-        //console.log(this.lleg.angularSpeed);
-
-        if(this.head.collided || this.torso.collided) {
-            this.dead = true;
-        }else{
-            this.dead = false;
-        }
     }
 
     removeFromWorld() {

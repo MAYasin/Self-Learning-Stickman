@@ -74,7 +74,7 @@ function setup() {
 
     modetext = "Idle";
     stickman = new Ragdoll(80, 200, ground, customOption);
-    stickman2 = new Ragdoll(120, 200, ground,customOption);
+    stickman2 = new Ragdoll(120, 200, ground, customOption);
     //walls
     bounds.push(new Boundary(0, height / 2, 20, height));
     bounds.push(new Boundary(width, height / 2, 20, height));
@@ -98,6 +98,8 @@ function draw() {
     fill(207, 57, 83);
     strokeWeight(0);
     text(modetext, 10, 40);
+
+    stickman.control(0.1, 0.1);
     stickman.update();
     stickman2.update();
 
