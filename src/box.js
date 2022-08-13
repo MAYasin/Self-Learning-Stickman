@@ -10,6 +10,7 @@ function Box(x, y, w, h, ground, options) {
     this.angularSpeed = this.body.angularSpeed;
     this.distanceToGround = 0;
     this.color = 255;
+    this.transparency = 255;
 
     Composite.add(world, this.body);
 
@@ -32,8 +33,8 @@ function Box(x, y, w, h, ground, options) {
         rotate(this.angle);
         rectMode(CENTER);
         strokeWeight(2);
-        stroke(0);
-        fill(this.color);
+        stroke(0, this.transparency);
+        fill(this.color, this.transparency);
         rect(0, 0, this.w, this.h);
         pop();
     }

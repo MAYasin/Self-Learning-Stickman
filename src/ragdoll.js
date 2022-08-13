@@ -74,10 +74,22 @@ class Ragdoll {
         );
     }
 
+    setTransparency(alpha) {
+        this.torso.transparency = alpha;
+            this.head.transparency = alpha;
+            this.rhand.transparency = alpha;
+            this.lhand.transparency = alpha;
+            this.rleg.transparency = alpha;
+            this.lleg.transparency = alpha;
+    }
+
     control(rotateLleg, rotateRleg) {
         if (!this.dead) {
+            console.log(rotateLleg);
             rotateRleg = rotateRleg/Math.pow(10, 1);
             rotateLleg = rotateLleg/Math.pow(10, 1);
+
+            console.log(rotateLleg);
 
             var xRval = (this.rleg.body.vertices[0].x + this.rleg.body.vertices[1].x) / 2;
             var yRval = (this.rleg.body.vertices[0].y + this.rleg.body.vertices[1].y) / 2;
@@ -106,6 +118,8 @@ class Ragdoll {
             this.lhand.color = 0;
             this.rleg.color = 0;
             this.lleg.color = 0;
+
+            this.setTransparency(150);
         }
 
         if (!this.dead) {

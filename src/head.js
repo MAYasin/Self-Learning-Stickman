@@ -6,6 +6,7 @@ function Head(x, y, r, ground, customOption) {
     this.ground = ground;
     this.collided = false;
     this.color = 255;
+    this.transparency = 255;
 
     Composite.add(world, this.body);
 
@@ -25,8 +26,8 @@ function Head(x, y, r, ground, customOption) {
         rotate(angle);
         ellipseMode(CENTER);
         strokeWeight(2);
-        stroke(0);
-        fill(this.color);
+        stroke(0, this.transparency);
+        fill(this.color, this.transparency);
         ellipse(0, 0, this.r * 2);
         pop();
     }
