@@ -74,6 +74,8 @@ class Ragdoll {
             this.torsoToHead, this.torsoToHeadA, this.torsoToRhand, this.torsoToLhand, this.torsoToRleg, this.torsoToLleg, this.legToLeg
         ]
         );
+
+        this.setTransparency(150);
     }
 
     setTransparency(alpha) {

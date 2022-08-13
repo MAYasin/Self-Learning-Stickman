@@ -22,10 +22,18 @@ let modetext;
 let ground;
 let customOption;
 
-const count = 1;
+const count = 100;
 
 function preload() {
     img = loadImage("assets/landscape.jpg");
+}
+
+function save(){
+    localStorage.setItem("bestBrain", JSON.stringify(bestStickman.brain));
+}
+
+function discard(){
+    localStorage.removeItem("bestBrain");
 }
 
 function generateStickmen(count) {
@@ -111,13 +119,16 @@ function draw() {
     strokeWeight(0);
     text(modetext, 10, 40);
 
+    const bestStickman = stickmen.find(s=>s.score == Math.max(...stickmen.map(s=>s.score)));
+
     //stickman.update();
 
     for (let i = 0; i < stickmen.length; i++) {
         stickmen[i].update();
     }
 
-    console.log(stickmen[0].score);
+    bestStickman.setTransparency(255);
+    bestStickman.update();
 
     for (const bound of bounds) {
         bound.show();
