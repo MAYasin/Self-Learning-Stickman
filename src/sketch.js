@@ -21,8 +21,19 @@ let img;
 let modetext;
 let ground;
 let customOption;
+
+const count = 1;
+
 function preload() {
     img = loadImage("assets/landscape.jpg");
+}
+
+function generateStickmen(count) {
+    const stickmen = [];
+    for (let i = 0; i < count; i++) {
+        stickmen.push(new Ragdoll(80, 200, ground, customOption));
+    }
+    return stickmen;
 }
 
 function setup() {
@@ -73,7 +84,9 @@ function setup() {
     };
 
     modetext = "Idle";
-    stickman = new Ragdoll(80, 200, ground, customOption);
+
+    stickmen = generateStickmen(count);
+    //stickman = new Ragdoll(80, 200, ground, customOption);
     //walls
     bounds.push(new Boundary(0, height / 2, 20, height));
     bounds.push(new Boundary(width, height / 2, 20, height));
@@ -98,10 +111,13 @@ function draw() {
     strokeWeight(0);
     text(modetext, 10, 40);
 
-    //stickman.control(0.1, 0.1);
-    stickman.update();
+    //stickman.update();
 
-    //console.log(stickman.dead);
+    for (let i = 0; i < stickmen.length; i++) {
+        stickmen[i].update();
+    }
+
+    console.log(stickmen[0].score);
 
     for (const bound of bounds) {
         bound.show();
@@ -116,8 +132,8 @@ function train() {
 
 function resetSketch() {
     modetext = "Idle";
-    stickman.removeFromWorld();
-    stickman = new Ragdoll(80, 200, ground, customOption);
+    //stickman.removeFromWorld();
+    //stickman = new Ragdoll(80, 200, ground, customOption);
 }
 
 function inference() {

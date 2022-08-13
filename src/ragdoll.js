@@ -4,6 +4,8 @@ class Ragdoll {
         this.y = y;
         this.dead = false;
 
+        this.score = 0;
+
         this.brain = new NeuralNetwork([9, 8, 2]);
 
         this.torso = new Box(this.x, this.y, 20, 60, ground, customOption);
@@ -85,11 +87,8 @@ class Ragdoll {
 
     control(rotateLleg, rotateRleg) {
         if (!this.dead) {
-            console.log(rotateLleg);
             rotateRleg = rotateRleg/Math.pow(10, 1);
             rotateLleg = rotateLleg/Math.pow(10, 1);
-
-            console.log(rotateLleg);
 
             var xRval = (this.rleg.body.vertices[0].x + this.rleg.body.vertices[1].x) / 2;
             var yRval = (this.rleg.body.vertices[0].y + this.rleg.body.vertices[1].y) / 2;
@@ -119,13 +118,14 @@ class Ragdoll {
             this.rleg.color = 0;
             this.lleg.color = 0;
 
-            this.setTransparency(150);
+            this.setTransparency(50);
         }
 
         if (!this.dead) {
+            this.score = this.torso.body.position.x - this.x;
             const outputs = NeuralNetwork.feedForward([this.lleg.angle, this.lleg.angularSpeed, this.lleg.collided ? 1 : 0, this.lleg.distanceToGround, this.torso.angle, this.rleg.angle, this.rleg.angularSpeed, this.rleg.collided ? 1 : 0, this.rleg.distanceToGround], this.brain)
-            console.log(this.brain.layers[0].inputs);
-            console.log(outputs);
+            //console.log(this.brain.layers[0].inputs);
+            //console.log(outputs);
             this.control(outputs[0], outputs[1]);
         }
 
