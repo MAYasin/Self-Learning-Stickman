@@ -12,7 +12,7 @@ class NeuralNetwork {
         for (let i = 1; i < network.layers.length; i++) {
             outputs = Layer.feedForward(outputs, network.layers[i]);
         }
-
+        
         return outputs;
     }
 }
@@ -54,11 +54,7 @@ class Layer {
             for (let j = 0; j < layer.inputs.length; j++) {
                 sum += layer.inputs[j] * layer.weights[j][i];
             }
-            /* if (sum > layer.biases[i]) {
-                layer.outputs[i] = 1;
-            } else {
-                layer.outputs[i] = 0
-            } */
+
             layer.outputs[i] = Math.tanh(sum + layer.biases[i]);
         }
 

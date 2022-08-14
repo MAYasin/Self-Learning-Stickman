@@ -21,6 +21,8 @@ let img;
 let modetext;
 let ground;
 let customOption;
+
+let stickmen;
 let bestStickman;
 
 const count = 100;
@@ -29,12 +31,12 @@ function preload() {
     img = loadImage("assets/landscape.jpg");
 }
 
-function save(){
-    localStorage.setItem("bestBrain", JSON.stringify(bestStickman.brain));
+function saveModel() {
+    localStorage.setItem("brainModel", JSON.stringify(bestStickman.brain));
 }
 
-function discard(){
-    localStorage.removeItem("bestBrain");
+function discardModel() {
+    localStorage.removeItem("brainModel");
 }
 
 function generateStickmen(count) {
@@ -46,20 +48,14 @@ function generateStickmen(count) {
 }
 
 function setup() {
+    //creating the canvas
     var canvas = createCanvas(1100, 600);
     img.resize(1100, 600);
 
-    resetbtn = createButton("Reset");
-    resetbtn.mousePressed(resetSketch);
-
-    trainbtn = createButton("Train");
-    trainbtn.mousePressed(train);
-
-    inferencebtn = createButton("Inference");
-    inferencebtn.mousePressed(inference);
-
+    //creating the engine
     engine = Engine.create();
 
+    //creating the renderer
     var render = Render.create({
         element: document.body,
         engine: engine,
@@ -76,12 +72,8 @@ function setup() {
     Render.run(render);
 
     runner = Runner.create();
-
     Runner.run(runner, engine);
 
-    var boundoptions = {
-        isStatic: true,
-    }
     //ground
     ground = new Boundary(width / 2, height, width, width / 6);
     bounds.push(ground);
@@ -94,19 +86,13 @@ function setup() {
 
     modetext = "Idle";
 
-    stickmen = generateStickmen(count);
-    bestStickman = stickmen[0];
-
-    if(localStorage.getItem("bestBrain")){
-        bestStickman.brain = JSON.parse(localStorage.getItem("bestBrain"));
-    }
-    //stickman = new Ragdoll(80, 200, ground, customOption);
     //walls
     bounds.push(new Boundary(0, height / 2, 20, height));
     bounds.push(new Boundary(width, height / 2, 20, height));
     //ceiling
     bounds.push(new Boundary(width / 2, 0, width, 20));
 
+    //mouse constraint
     var canvasmouse = Mouse.create(canvas.elt);
     canvasmouse.pixelRatio = pixelDensity();
     var options = {
@@ -125,16 +111,16 @@ function draw() {
     strokeWeight(0);
     text(modetext, 10, 40);
 
-    bestStickman = stickmen.find(s=>s.score == Math.max(...stickmen.map(s=>s.score)));
+    if (stickmen != null) {
+        bestStickman = stickmen.find(s => s.score == Math.max(...stickmen.map(s => s.score)));
 
-    //stickman.update();
 
-    for (let i = 0; i < stickmen.length; i++) {
-        stickmen[i].update();
+        for (let i = 0; i < stickmen.length; i++) {
+            stickmen[i].update();
+        }
+        bestStickman.setTransparency(255);
+        bestStickman.update();
     }
-
-    bestStickman.setTransparency(255);
-    bestStickman.update();
 
     for (const bound of bounds) {
         bound.show();
@@ -143,14 +129,30 @@ function draw() {
 
 function train() {
     modetext = "Training...";
-    let val = random(255);
-    background(val);
+
+    if (stickmen != null) {
+        for (let i = 0; i < stickmen.length; i++) {
+            stickmen[i].removeFromWorld();
+        }
+    }
+
+    stickmen = generateStickmen(count);
+
+    bestStickman = stickmen[0];
+
+    if (localStorage.getItem("brainModel")) {
+        bestStickman.brain = JSON.parse(localStorage.getItem("brainModel"));
+    }
 }
 
 function resetSketch() {
     modetext = "Idle";
-    //stickman.removeFromWorld();
-    //stickman = new Ragdoll(80, 200, ground, customOption);
+
+    if (stickmen != null) {
+        for (let i = 0; i < stickmen.length; i++) {
+            stickmen[i].removeFromWorld();
+        }
+    }
 }
 
 function inference() {
