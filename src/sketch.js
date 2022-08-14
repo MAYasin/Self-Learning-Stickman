@@ -21,6 +21,7 @@ let img;
 let modetext;
 let ground;
 let customOption;
+let bestStickman;
 
 const count = 100;
 
@@ -94,6 +95,11 @@ function setup() {
     modetext = "Idle";
 
     stickmen = generateStickmen(count);
+    bestStickman = stickmen[0];
+
+    if(localStorage.getItem("bestBrain")){
+        bestStickman.brain = JSON.parse(localStorage.getItem("bestBrain"));
+    }
     //stickman = new Ragdoll(80, 200, ground, customOption);
     //walls
     bounds.push(new Boundary(0, height / 2, 20, height));
@@ -119,7 +125,7 @@ function draw() {
     strokeWeight(0);
     text(modetext, 10, 40);
 
-    const bestStickman = stickmen.find(s=>s.score == Math.max(...stickmen.map(s=>s.score)));
+    bestStickman = stickmen.find(s=>s.score == Math.max(...stickmen.map(s=>s.score)));
 
     //stickman.update();
 
