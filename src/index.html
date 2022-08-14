@@ -19,9 +19,18 @@
     <main>
     </main>
     <script src="sketch.js"></script>
-    <button title="Reset" onclick="clickReset()">Reset</button>
-    <button title="Train" onclick="clickTrain()">Train</button>
-    <button title="Inference" onclick="clickInference()">Inference</button>
+    <div id="controls">
+        <button title="Reset" onclick="clickReset()">Reset</button>
+
+        <div class="slider-wrapper">
+            <input id="slider" class="slider" type="range" min="0" max="101" value="10" step="10">
+            <h3>Unknown</h3>
+        </div>
+        <button title="Train" onclick="clickTrain()">Train</button>
+        
+        <button id="inference" title="Inference" onclick="clickInference()">Inference</button>
+    </div>
 </body>
 <script src="../reload/reload.js"></script>
+
 </html>

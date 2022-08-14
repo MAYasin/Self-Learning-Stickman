@@ -19,13 +19,15 @@ var bounds = [];
 
 let img;
 let modetext;
+let gentext;
 let ground;
 let customOption;
+let slider;
+let h3;
 
 let stickmen;
+let genCount = 0;
 let bestStickman;
-
-const count = 100;
 
 function generateStickmen(count) {
     const stickmen = [];
@@ -45,6 +47,10 @@ function setup() {
     //creating the canvas
     var canvas = createCanvas(1100, 600);
     img.resize(1100, 600);
+
+    //slider
+    slider = select('#slider');
+    h3 = select('h3');
 
     //creating the engine
     engine = Engine.create();
@@ -79,6 +85,7 @@ function setup() {
     };
 
     modetext = "Idle";
+    gentext = "Gen: undefined";
 
     //walls
     bounds.push(new Boundary(0, height / 2, 20, height));
@@ -99,12 +106,14 @@ function setup() {
 
 //drawing the canvas
 function draw() {
+    h3.html(slider.value()==0?1:slider.value());
     //Engine.update(engine)
     image(img, 0, 0);
     textSize(27);
     fill(207, 57, 83);
     strokeWeight(0);
     text(modetext, 10, 40);
+    text(gentext, 800, 40);
 
     if (stickmen != null) {
         bestStickman = stickmen.find(s => s.score == Math.max(...stickmen.map(s => s.score)));
@@ -117,12 +126,14 @@ function draw() {
         bestStickman.update();
     }
 
+    gentext = "Gen: " + (stickmen == null ? "undefined" : genCount);
+
     for (const bound of bounds) {
         bound.show();
     }
 }
 
-//buttons
+//html utils
 function saveModel() {
     localStorage.setItem("brainModel", JSON.stringify(bestStickman.brain));
 }
@@ -142,23 +153,24 @@ function clickReset() {
 }
 
 function clickTrain() {
-    modetext = "Training...";
-
     if (stickmen != null) {
         for (let i = 0; i < stickmen.length; i++) {
             stickmen[i].removeFromWorld();
         }
     }
 
-    stickmen = generateStickmen(count);
+    stickmen = generateStickmen(slider.value()==0?1:slider.value());
 
     bestStickman = stickmen[0];
 
     if (localStorage.getItem("brainModel")) {
         bestStickman.brain = JSON.parse(localStorage.getItem("brainModel"));
     }
+
+    modetext = "Training... " + stickmen.length + " stickmen";
 }
 
 function clickInference() {
     modetext = "Inference";
+    gentext = "Gen: 1000" ;
 }
