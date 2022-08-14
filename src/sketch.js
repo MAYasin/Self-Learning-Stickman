@@ -27,18 +27,6 @@ let bestStickman;
 
 const count = 100;
 
-function preload() {
-    img = loadImage("assets/landscape.jpg");
-}
-
-function saveModel() {
-    localStorage.setItem("brainModel", JSON.stringify(bestStickman.brain));
-}
-
-function discardModel() {
-    localStorage.removeItem("brainModel");
-}
-
 function generateStickmen(count) {
     const stickmen = [];
     for (let i = 0; i < count; i++) {
@@ -47,6 +35,12 @@ function generateStickmen(count) {
     return stickmen;
 }
 
+//preload resources
+function preload() {
+    img = loadImage("assets/landscape.jpg");
+}
+
+//initialisation of the sketch
 function setup() {
     //creating the canvas
     var canvas = createCanvas(1100, 600);
@@ -103,6 +97,7 @@ function setup() {
     Composite.add(world, mConstraint);
 }
 
+//drawing the canvas
 function draw() {
     //Engine.update(engine)
     image(img, 0, 0);
@@ -127,7 +122,26 @@ function draw() {
     }
 }
 
-function train() {
+//buttons
+function saveModel() {
+    localStorage.setItem("brainModel", JSON.stringify(bestStickman.brain));
+}
+
+function discardModel() {
+    localStorage.removeItem("brainModel");
+}
+
+function clickReset() {
+    modetext = "Idle";
+
+    if (stickmen != null) {
+        for (let i = 0; i < stickmen.length; i++) {
+            stickmen[i].removeFromWorld();
+        }
+    }
+}
+
+function clickTrain() {
     modetext = "Training...";
 
     if (stickmen != null) {
@@ -145,16 +159,6 @@ function train() {
     }
 }
 
-function resetSketch() {
-    modetext = "Idle";
-
-    if (stickmen != null) {
-        for (let i = 0; i < stickmen.length; i++) {
-            stickmen[i].removeFromWorld();
-        }
-    }
-}
-
-function inference() {
+function clickInference() {
     modetext = "Inference";
 }
