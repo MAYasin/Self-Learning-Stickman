@@ -32,7 +32,7 @@ let bestStickman;
 function generateStickmen(count) {
     const stickmen = [];
     for (let i = 0; i < count; i++) {
-        stickmen.push(new Ragdoll(80, 200, ground, customOption));
+        stickmen.push(new Ragdoll(80, 400, ground, customOption));
     }
     return stickmen;
 }
@@ -125,6 +125,19 @@ function draw() {
         }
         bestStickman.setTransparency(255);
         bestStickman.update();
+
+        var alldead = stickmen.every(s => s.dead);
+        console.log(alldead);
+        if (alldead) {
+            genCount += 1;
+            for (let i = 0; i < stickmen.length; i++) {
+                stickmen[i].removeFromWorld();
+            }
+
+            stickmen = undefined;
+
+            stickmen = generateStickmen(slider.value()==0?1:slider.value());
+        }
     }
 
     gentext = "Gen: " + (stickmen == null ? "undefined" : genCount);
