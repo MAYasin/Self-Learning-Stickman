@@ -44,6 +44,7 @@ function preload() {
 
 //initialisation of the sketch
 function setup() {
+    genCount = 0;
     //creating the canvas
     var canvas = createCanvas(1100, 600);
     img.resize(1100, 600);
@@ -150,6 +151,7 @@ function discardModel() {
 }
 
 function clickReset() {
+    genCount = 0;
     modetext = "Idle";
 
     if (stickmen != null) {
@@ -162,6 +164,7 @@ function clickReset() {
 }
 
 function clickTrain() {
+    genCount = 0;
     if (stickmen != null) {
         for (let i = 0; i < stickmen.length; i++) {
             stickmen[i].removeFromWorld();
