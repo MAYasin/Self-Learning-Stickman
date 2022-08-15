@@ -15,7 +15,7 @@ function Boundary(x, y, w, h) {
         translate(pos.x, pos.y);
         rotate(angle);
         rectMode(CENTER);
-        fill(0, 255, 0, 50);
+        fill(0, 0, 0, 150);
         rect(0, 0, this.w, this.h);
         pop();
     }

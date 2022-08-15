@@ -127,7 +127,7 @@ class Ragdoll {
             this.score = this.torso.body.position.x - this.x;
             const outputs = NeuralNetwork.feedForward([this.lleg.angle, this.lleg.angularSpeed, this.lleg.collided ? 1 : 0, this.lleg.distanceToGround, this.torso.angle, this.rleg.angle, this.rleg.angularSpeed, this.rleg.collided ? 1 : 0, this.rleg.distanceToGround], this.brain)
             //console.log(this.brain.layers[0].inputs);
-            console.log(outputs);
+            //console.log(outputs);
             this.control(outputs[0], outputs[1]);
         }
 

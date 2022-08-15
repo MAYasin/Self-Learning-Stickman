@@ -157,6 +157,8 @@ function clickReset() {
             stickmen[i].removeFromWorld();
         }
     }
+
+    stickmen = undefined;
 }
 
 function clickTrain() {
@@ -165,6 +167,7 @@ function clickTrain() {
             stickmen[i].removeFromWorld();
         }
     }
+    stickmen = undefined;
 
     stickmen = generateStickmen(slider.value()==0?1:slider.value());
 
