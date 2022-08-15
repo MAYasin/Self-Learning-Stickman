@@ -113,7 +113,7 @@ function draw() {
     fill(207, 57, 83);
     strokeWeight(0);
     text(modetext, 10, 40);
-    text(gentext, 800, 40);
+    text(gentext, 850, 40);
 
     if (stickmen != null) {
         bestStickman = stickmen.find(s => s.score == Math.max(...stickmen.map(s => s.score)));
@@ -131,6 +131,13 @@ function draw() {
     for (const bound of bounds) {
         bound.show();
     }
+
+    strokeWeight(10);
+    stroke(0,255,0);
+    line(80, 400, 80, 510);
+
+    stroke(255,0,0);
+    line(1030, 400, 1030, 510);
 }
 
 //html utils
