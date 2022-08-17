@@ -2,7 +2,7 @@ var express = require('express');
 var reload = require('reload');
 
 var app = express();
-var sever = app.listen(3000);
+var sever = app.listen(process.env.PORT || 3000);
 
 app.use(express.static('src'));
 
