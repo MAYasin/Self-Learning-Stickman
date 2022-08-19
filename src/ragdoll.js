@@ -1,8 +1,10 @@
 class Ragdoll {
-    constructor(x, y, ground, customOption) {
+    constructor(x, y, ground, customOption, starttime) {
         this.x = x;
         this.y = y;
         this.dead = false;
+        this.starttime = starttime;
+        this.deadtime;
 
         this.score = 0;
 
@@ -141,6 +143,7 @@ class Ragdoll {
     }
 
     removeFromWorld() {
+        this.deadtime = new Date();
         Composite.remove(world, [this.torso.body, this.head.body, this.rhand.body, this.lhand.body, this.rleg.body, this.lleg.body, this.torsoToHead, this.torsoToHeadA, this.torsoToRhand, this.torsoToLhand, this.torsoToRleg, this.torsoToLleg, this.legToLeg]);
     }
 }

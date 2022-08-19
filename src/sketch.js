@@ -28,11 +28,14 @@ let h3;
 let stickmen;
 let genCount = 0;
 let bestStickman;
+let scoreRec;
 
-function generateStickmen(count) {
+let starttime;
+
+function generateStickmen(count, time) {
     const stickmen = [];
     for (let i = 0; i < count; i++) {
-        stickmen.push(new Ragdoll(80, 400, ground, customOption));
+        stickmen.push(new Ragdoll(80, 400, ground, customOption, time));
     }
     return stickmen;
 }
@@ -44,6 +47,7 @@ function preload() {
 
 //initialisation of the sketch
 function setup() {
+    starttime = new Date();
     genCount = 0;
     //creating the canvas
     var canvas = createCanvas(1100, 600);
@@ -103,11 +107,14 @@ function setup() {
 
     mConstraint = MouseConstraint.create(engine, options);
     Composite.add(world, mConstraint);
+
+    scoreRec = stickmen[0].score;
+    bestStickman = stickmen[0];
 }
 
 //drawing the canvas
 function draw() {
-    h3.html(slider.value()==0?1:slider.value());
+    h3.html(slider.value() == 0 ? 1 : slider.value());
     //Engine.update(engine)
     image(img, 0, 0);
     textSize(27);
@@ -117,17 +124,22 @@ function draw() {
     text(gentext, 850, 40);
 
     if (stickmen != null) {
-        bestStickman = stickmen.find(s => s.score == Math.max(...stickmen.map(s => s.score)));
-
 
         for (let i = 0; i < stickmen.length; i++) {
+            if (stickmen[i].score > scoreRec) {
+                scoreRec = stickmen[i].score;
+                bestStickman = stickmen[i];
+            }
             stickmen[i].update();
         }
         bestStickman.setTransparency(255);
-        bestStickman.update();
 
         var alldead = stickmen.every(s => s.dead);
-        console.log(alldead);
+
+        stickmen.forEach(element => {
+            if (element.score > 950) { alldead = true; }
+        });
+        //console.log(alldead);
         if (alldead) {
             genCount += 1;
             for (let i = 0; i < stickmen.length; i++) {
@@ -136,7 +148,11 @@ function draw() {
 
             stickmen = undefined;
 
-            stickmen = generateStickmen(slider.value()==0?1:slider.value());
+            stickmen = generateStickmen(slider.value() == 0 ? 1 : slider.value(), new Date());
+
+            if (localStorage.getItem("brainModel")) {
+                bestStickman.brain = JSON.parse(localStorage.getItem("brainModel"));
+            }
         }
     }
 
@@ -147,10 +163,10 @@ function draw() {
     }
 
     strokeWeight(10);
-    stroke(0,255,0);
+    stroke(0, 255, 0);
     line(80, 400, 80, 510);
 
-    stroke(255,0,0);
+    stroke(255, 0, 0);
     line(1030, 400, 1030, 510);
 }
 
@@ -185,7 +201,7 @@ function clickTrain() {
     }
     stickmen = undefined;
 
-    stickmen = generateStickmen(slider.value()==0?1:slider.value());
+    stickmen = generateStickmen(slider.value() == 0 ? 1 : slider.value(), new Date());
 
     bestStickman = stickmen[0];
 
@@ -198,5 +214,5 @@ function clickTrain() {
 
 function clickInference() {
     modetext = "Inference";
-    gentext = "Gen: 1000" ;
+    gentext = "Gen: 1000";
 }
