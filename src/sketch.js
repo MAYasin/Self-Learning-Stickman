@@ -37,6 +37,9 @@ function generateStickmen(count, time) {
     for (let i = 0; i < count; i++) {
         stickmen.push(new Ragdoll(80, 400, ground, customOption, time));
     }
+
+    scoreRec = -100;
+    bestStickman = stickmen[0];
     return stickmen;
 }
 
@@ -107,9 +110,6 @@ function setup() {
 
     mConstraint = MouseConstraint.create(engine, options);
     Composite.add(world, mConstraint);
-
-    scoreRec = stickmen[0].score;
-    bestStickman = stickmen[0];
 }
 
 //drawing the canvas
@@ -129,6 +129,8 @@ function draw() {
             if (stickmen[i].score > scoreRec) {
                 scoreRec = stickmen[i].score;
                 bestStickman = stickmen[i];
+            } else {
+                stickmen[i].resetTransparency();
             }
             stickmen[i].update();
         }
