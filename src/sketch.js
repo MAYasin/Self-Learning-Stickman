@@ -152,7 +152,6 @@ function draw() {
 
                 stickmen.forEach((element, index) => {
                     element.brain = JSON.parse(localStorage.getItem("brainModel"));
-                    console.log(index);
                     if(index != 0) {
                         NeuralNetwork.mutate(element.brain, 0.1);
                     }

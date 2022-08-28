@@ -74,7 +74,3 @@ class Layer {
         return layer.outputs;
     }
 }
-
-function lerp(a, b, t) {
-    return a + (b - a) * t;
-}

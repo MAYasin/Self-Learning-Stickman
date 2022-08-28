@@ -107,7 +107,7 @@ class Ragdoll {
     }
 
     update() {
-        if (this.head.collided || this.torso.collided) {
+        if (this.head.collided || this.torso.collided || this.kill(20)) {
             this.dead = true;
 
             this.deadtime = new Date();
@@ -153,5 +153,16 @@ class Ragdoll {
 
     getLog() {
         return { "score": this.score, "time": (this.deadtime - this.starttime) / 1000, "generation": this.generation };
+    }
+
+    kill(seconds){
+        var time = new Date();
+        var kill = ((time.getTime() - this.starttime.getTime())/ 1000) >= seconds;
+        if(kill){
+            this.dead = true;
+            console.log("Killed");
+            return true;
+        }
+        return false;
     }
 }
