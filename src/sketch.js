@@ -27,7 +27,6 @@ let h3;
 let stickmen;
 let genCount = 0;
 let bestStickman;
-let scoreRec;
 
 let starttime;
 
@@ -37,10 +36,9 @@ let log = [];
 function generateStickmen(count, time) {
     const stickmen = [];
     for (let i = 0; i < count; i++) {
-        stickmen.push(new Ragdoll(80, height/1.5, bounds, customOption, time, genCount));
+        stickmen.push(new Ragdoll(80, height/1.4, bounds, customOption, time, genCount));
     }
 
-    scoreRec = -100;
     bestStickman = stickmen[0];
     return stickmen;
 }
@@ -126,16 +124,11 @@ function draw() {
 
     if (stickmen != null) {
 
-        for (let i = 0; i < stickmen.length; i++) {
-            if (stickmen[i].score > scoreRec) {
-                scoreRec = stickmen[i].score;
-                bestStickman = stickmen[i];
-            } else {
-                stickmen[i].resetTransparency();
-            }
-            stickmen[i].update();
-        }
+        stickmen.forEach(stickman => stickman.resetTransparency());
+        bestStickman = stickmen.find(s=> s.score == Math.max(...stickmen.map(s=> s.score)));
         bestStickman.setTransparency(255);
+
+        stickmen.forEach(stickman => stickman.update());
 
         var alldead = stickmen.every(s => s.dead);
 

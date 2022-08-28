@@ -93,8 +93,8 @@ class Ragdoll {
 
     control(rotateLleg, rotateRleg) {
         if (!this.dead) {
-            rotateRleg = rotateRleg / Math.pow(10, 1);
-            rotateLleg = rotateLleg / Math.pow(10, 1);
+            rotateRleg = rotateRleg / Math.pow(10, 1) * 2;
+            rotateLleg = rotateLleg / Math.pow(10, 1) * 2;
 
             var xRval = (this.rleg.body.vertices[0].x + this.rleg.body.vertices[1].x) / 2;
             var yRval = (this.rleg.body.vertices[0].y + this.rleg.body.vertices[1].y) / 2;
