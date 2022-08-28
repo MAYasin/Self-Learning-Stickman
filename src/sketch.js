@@ -135,7 +135,7 @@ function draw() {
         stickmen.forEach(element => {
             if (element.score > 950) { alldead = true; }
         });
-        //console.log(alldead);
+
         if (alldead) {
             genCount += 1;
 
@@ -159,7 +159,6 @@ function draw() {
             }
         }
 
-        //console.log(bestStickman);
     }
 
     gentext = "Gen: " + (stickmen == null ? "undefined" : genCount);

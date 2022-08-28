@@ -93,8 +93,8 @@ class Ragdoll {
 
     control(rotateLleg, rotateRleg) {
         if (!this.dead) {
-            rotateRleg = rotateRleg / Math.pow(10, 1) * 2;
-            rotateLleg = rotateLleg / Math.pow(10, 1) * 2;
+            rotateRleg = rotateRleg / Math.pow(10, 1) * 5;
+            rotateLleg = rotateLleg / Math.pow(10, 1) * 5;
 
             var xRval = (this.rleg.body.vertices[0].x + this.rleg.body.vertices[1].x) / 2;
             var yRval = (this.rleg.body.vertices[0].y + this.rleg.body.vertices[1].y) / 2;
@@ -131,9 +131,8 @@ class Ragdoll {
 
         if (!this.dead) {
             this.score = this.torso.body.position.x - this.x;
-            const outputs = NeuralNetwork.feedForward([this.lleg.angle, this.lleg.angularSpeed, this.lleg.collided ? 1 : 0, this.lleg.distanceToGround, this.torso.angle, this.rleg.angle, this.rleg.angularSpeed, this.rleg.collided ? 1 : 0, this.rleg.distanceToGround], this.brain)
+            const outputs = NeuralNetwork.feedForward([roundTo(this.lleg.angle, 2), roundTo(this.lleg.angularSpeed, 2), this.lleg.collided ? 1 : 0, roundTo(this.lleg.distanceToGround, 2), roundTo(this.torso.angle, 2), roundTo(this.rleg.angle, 2), roundTo(this.rleg.angularSpeed, 2), this.rleg.collided ? 1 : 0, roundTo(this.rleg.distanceToGround, 2)], this.brain)
             //console.log(this.brain.layers[0].inputs);
-            //console.log(outputs);
             this.control(outputs[0], outputs[1]);
         }
 
@@ -155,14 +154,18 @@ class Ragdoll {
         return { "score": this.score, "time": (this.deadtime - this.starttime) / 1000, "generation": this.generation };
     }
 
-    kill(seconds){
+    kill(seconds) {
         var time = new Date();
-        var kill = ((time.getTime() - this.starttime.getTime())/ 1000) >= seconds;
-        if(kill){
+        var kill = ((time.getTime() - this.starttime.getTime()) / 1000) >= seconds;
+        if (kill) {
             this.dead = true;
-            console.log("Killed");
             return true;
         }
         return false;
     }
+}
+
+function roundTo(float, decimalPlaces) {
+    var multiplier = Math.pow(10, decimalPlaces);
+    return Math.round(float * multiplier) / multiplier;
 }
