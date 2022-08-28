@@ -1,5 +1,5 @@
 class Ragdoll {
-    constructor(x, y, ground, customOption, starttime, generation) {
+    constructor(x, y, bounds, customOption, starttime, generation) {
         this.x = x;
         this.y = y;
         this.dead = false;
@@ -9,12 +9,12 @@ class Ragdoll {
         this.score = 0;
         this.brain = new NeuralNetwork([9, 8, 2]);
 
-        this.torso = new Box(this.x, this.y, 20, 60, ground, customOption);
-        this.head = new Head(this.x, this.y - 50, 18, ground, customOption);
-        this.rhand = new Box(this.x + 25, this.y - 10, 30, 4, ground, customOption);
-        this.lhand = new Box(this.x - 25, this.y - 10, 30, 4, ground, customOption);
-        this.rleg = new Box(this.x + 10, this.y + 50, 8, 40, ground, customOption);
-        this.lleg = new Box(this.x - 10, this.y + 50, 8, 40, ground, customOption);
+        this.torso = new Box(this.x, this.y, 20, 60, bounds, customOption);
+        this.head = new Head(this.x, this.y - 50, 18, bounds, customOption);
+        this.rhand = new Box(this.x + 25, this.y - 10, 30, 4, bounds, customOption);
+        this.lhand = new Box(this.x - 25, this.y - 10, 30, 4, bounds, customOption);
+        this.rleg = new Box(this.x + 10, this.y + 50, 8, 40, bounds, customOption);
+        this.lleg = new Box(this.x - 10, this.y + 50, 8, 40, bounds, customOption);
 
         this.torsoToHead = Constraint.create({
             bodyA: this.torso.body,

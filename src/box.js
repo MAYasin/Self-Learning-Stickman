@@ -1,10 +1,10 @@
-function Box(x, y, w, h, ground, options) {
+function Box(x, y, w, h, bounds, options) {
     this.body = Bodies.rectangle(x, y, w, h, options);
     this.x = x;
     this.y = y
     this.w = w;
     this.h = h;
-    this.ground = ground;
+    this.bounds = bounds;
     this.collided = false;
     this.angle = this.body.angle;
     this.angularSpeed = this.body.angularSpeed;
@@ -19,14 +19,17 @@ function Box(x, y, w, h, ground, options) {
         this.angularSpeed = this.body.angularSpeed;
         this.angle = this.body.angle;
 
-        var collision = Collision.collides(this.body, this.ground.body);
-        if (collision !== null) {
-            this.collided = true;
-        } else {
-            this.collided = false;
+        for (const bound of bounds) {
+            var collision = Collision.collides(this.body, bound.body);
+            if (collision !== null) {
+                this.collided = true;
+                break;
+            } else {
+                this.collided = false;
+            }
         }
 
-        this.distanceToGround = (this.ground.body.position.y - this.ground.h/2)  - (this.body.vertices[3].y);
+        this.distanceToGround = (this.bounds[0].body.position.y - this.bounds[0].h/2)  - (this.body.vertices[3].y);
 
         push();
         translate(pos.x, pos.y);

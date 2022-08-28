@@ -1,9 +1,9 @@
-function Head(x, y, r, ground, customOption) {
+function Head(x, y, r, bounds, customOption) {
     this.body = Bodies.circle(x, y, r, { isStatic: false, density: 0.0001, collisionFilter: customOption.collisionFilter});
     this.x = x;
     this.y = y;
     this.r = r;
-    this.ground = ground;
+    this.bounds = bounds;
     this.collided = false;
     this.color = 255;
     this.transparency = 255;
@@ -14,11 +14,14 @@ function Head(x, y, r, ground, customOption) {
         var pos = this.body.position;
         var angle = this.body.angle;
 
-        var collision = Collision.collides(this.body, this.ground.body);
-        if (collision !== null) {
-            this.collided = true;
-        } else {
-            this.collided = false;
+        for (const bound of bounds) {
+            var collision = Collision.collides(this.body, bound.body);
+            if (collision !== null) {
+                this.collided = true;
+                break;
+            } else {
+                this.collided = false;
+            }
         }
 
         push();

@@ -20,7 +20,6 @@ var bounds = [];
 let img;
 let modetext;
 let gentext;
-let ground;
 let customOption;
 let slider;
 let h3;
@@ -38,7 +37,7 @@ let log = [];
 function generateStickmen(count, time) {
     const stickmen = [];
     for (let i = 0; i < count; i++) {
-        stickmen.push(new Ragdoll(80, 400, ground, customOption, time, genCount));
+        stickmen.push(new Ragdoll(80, 400, bounds, customOption, time, genCount));
     }
 
     scoreRec = -100;
@@ -86,10 +85,6 @@ function setup() {
     runner = Runner.create();
     Runner.run(runner, engine);
 
-    //ground
-    ground = new Boundary(width / 2, height, width, width / 6);
-    bounds.push(ground);
-
     customOption = {
         collisionFilter: {
             group: Body.nextGroup(true),
@@ -99,6 +94,8 @@ function setup() {
     modetext = "Idle";
     gentext = "Gen: undefined";
 
+    //ground
+    bounds.push(new Boundary(width / 2, height, width, width / 6));
     //walls
     bounds.push(new Boundary(0, height / 2, 20, height));
     bounds.push(new Boundary(width, height / 2, 20, height));
