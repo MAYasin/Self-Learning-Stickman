@@ -32,10 +32,13 @@ let scoreRec;
 
 let starttime;
 
+let writer;
+let log = [];
+
 function generateStickmen(count, time) {
     const stickmen = [];
     for (let i = 0; i < count; i++) {
-        stickmen.push(new Ragdoll(80, 400, ground, customOption, time));
+        stickmen.push(new Ragdoll(80, 400, ground, customOption, time, genCount));
     }
 
     scoreRec = -100;
@@ -50,6 +53,7 @@ function preload() {
 
 //initialisation of the sketch
 function setup() {
+    writer = createWriter('Log.txt');
     starttime = new Date();
     genCount = 0;
     //creating the canvas
@@ -144,6 +148,8 @@ function draw() {
         //console.log(alldead);
         if (alldead) {
             genCount += 1;
+
+            saveModel();
             for (let i = 0; i < stickmen.length; i++) {
                 stickmen[i].removeFromWorld();
             }
@@ -153,9 +159,18 @@ function draw() {
             stickmen = generateStickmen(slider.value() == 0 ? 1 : slider.value(), new Date());
 
             if (localStorage.getItem("brainModel")) {
-                bestStickman.brain = JSON.parse(localStorage.getItem("brainModel"));
+
+                stickmen.forEach((element, index) => {
+                    element.brain = JSON.parse(localStorage.getItem("brainModel"));
+                    console.log(index);
+                    if(index != 0) {
+                        NeuralNetwork.mutate(element.brain, 0.1);
+                    }
+                });
             }
         }
+
+        //console.log(bestStickman);
     }
 
     gentext = "Gen: " + (stickmen == null ? "undefined" : genCount);
@@ -175,6 +190,8 @@ function draw() {
 //html utils
 function saveModel() {
     localStorage.setItem("brainModel", JSON.stringify(bestStickman.brain));
+
+    log.push(bestStickman.getLog());
 }
 
 function discardModel() {
@@ -205,16 +222,15 @@ function clickTrain() {
 
     stickmen = generateStickmen(slider.value() == 0 ? 1 : slider.value(), new Date());
 
-    bestStickman = stickmen[0];
-
-    if (localStorage.getItem("brainModel")) {
-        bestStickman.brain = JSON.parse(localStorage.getItem("brainModel"));
-    }
-
     modetext = "Training... " + stickmen.length + " stickmen";
 }
 
 function clickInference() {
     modetext = "Inference";
     gentext = "Gen: 1000";
+}
+
+function saveLog() {
+    writer.write(log);
+    writer.close();
 }

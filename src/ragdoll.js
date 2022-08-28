@@ -1,22 +1,18 @@
 class Ragdoll {
-    constructor(x, y, ground, customOption, starttime) {
+    constructor(x, y, ground, customOption, starttime, generation) {
         this.x = x;
         this.y = y;
         this.dead = false;
         this.starttime = starttime;
-        this.deadtime;
-
+        this.generation = generation;
+        this.deathtime;
         this.score = 0;
-
         this.brain = new NeuralNetwork([9, 8, 2]);
 
         this.torso = new Box(this.x, this.y, 20, 60, ground, customOption);
-
         this.head = new Head(this.x, this.y - 50, 18, ground, customOption);
-
         this.rhand = new Box(this.x + 25, this.y - 10, 30, 4, ground, customOption);
         this.lhand = new Box(this.x - 25, this.y - 10, 30, 4, ground, customOption);
-
         this.rleg = new Box(this.x + 10, this.y + 50, 8, 40, ground, customOption);
         this.lleg = new Box(this.x - 10, this.y + 50, 8, 40, ground, customOption);
 
@@ -114,6 +110,8 @@ class Ragdoll {
         if (this.head.collided || this.torso.collided) {
             this.dead = true;
 
+            this.deadtime = new Date();
+
             this.torso.body.isStatic = true;
             this.head.body.isStatic = true;
             this.rhand.body.isStatic = true;
@@ -151,5 +149,9 @@ class Ragdoll {
     removeFromWorld() {
         this.deadtime = new Date();
         Composite.remove(world, [this.torso.body, this.head.body, this.rhand.body, this.lhand.body, this.rleg.body, this.lleg.body, this.torsoToHead, this.torsoToHeadA, this.torsoToRhand, this.torsoToLhand, this.torsoToRleg, this.torsoToLleg, this.legToLeg]);
+    }
+
+    getLog() {
+        return { "score": this.score, "time": (this.deadtime - this.starttime) / 1000, "generation": this.generation };
     }
 }

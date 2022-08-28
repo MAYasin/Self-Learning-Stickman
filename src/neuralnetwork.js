@@ -12,8 +12,21 @@ class NeuralNetwork {
         for (let i = 1; i < network.layers.length; i++) {
             outputs = Layer.feedForward(outputs, network.layers[i]);
         }
-        
+
         return outputs;
+    }
+
+    static mutate(network, mutationRate = 1) {
+        network.layers.forEach(layer => {
+            for (let i = 0; i < layer.biases.length; i++) {
+                layer.biases[i] = lerp(layer.biases[i], Math.random() * 2 - 1, mutationRate);
+            }
+            for (let i = 0; i < layer.weights.length; i++) {
+                for (let j = 0; j < layer.weights[i].length; j++) {
+                    layer.weights[i][j] = lerp(layer.weights[i][j], Math.random() * 2 - 1, mutationRate);
+                }
+            }
+        });
     }
 }
 
@@ -60,4 +73,8 @@ class Layer {
 
         return layer.outputs;
     }
+}
+
+function lerp(a, b, t) {
+    return a + (b - a) * t;
 }
