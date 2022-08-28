@@ -37,7 +37,7 @@ let log = [];
 function generateStickmen(count, time) {
     const stickmen = [];
     for (let i = 0; i < count; i++) {
-        stickmen.push(new Ragdoll(80, 400, bounds, customOption, time, genCount));
+        stickmen.push(new Ragdoll(80, height/1.5, bounds, customOption, time, genCount));
     }
 
     scoreRec = -100;
