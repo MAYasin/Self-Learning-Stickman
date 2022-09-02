@@ -33,10 +33,13 @@ let starttime;
 let writer;
 let log = [];
 
+let stoppingAlgo;
+
+
 function generateStickmen(count, time) {
     const stickmen = [];
     for (let i = 0; i < count; i++) {
-        stickmen.push(new Ragdoll(80, height/1.4, bounds, customOption, time, genCount));
+        stickmen.push(new Ragdoll(80, height / 1.4, bounds, customOption, time, genCount));
     }
 
     bestStickman = stickmen[0];
@@ -50,7 +53,8 @@ function preload() {
 
 //initialisation of the sketch
 function setup() {
-    writer = createWriter('Log.txt');
+    discardModel();
+    stoppingAlgo = false;
     starttime = new Date();
     genCount = 0;
     //creating the canvas
@@ -125,16 +129,17 @@ function draw() {
     if (stickmen != null) {
 
         stickmen.forEach(stickman => stickman.resetTransparency());
-        bestStickman = stickmen.find(s=> s.score == Math.max(...stickmen.map(s=> s.score)));
+        bestStickman = stickmen.find(s => s.score == Math.max(...stickmen.map(s => s.score)));
         bestStickman.setTransparency(255);
 
         stickmen.forEach(stickman => stickman.update());
 
         var alldead = stickmen.every(s => s.dead);
 
-        stickmen.forEach(element => {
-            if (element.score > 950) { alldead = true; }
-        });
+        if (bestStickman.score > 950) {
+            alldead = true;
+            stoppingAlgo = true;
+        }
 
         if (alldead) {
             genCount += 1;
@@ -146,16 +151,25 @@ function draw() {
 
             stickmen = undefined;
 
-            stickmen = generateStickmen(slider.value() == 0 ? 1 : slider.value(), new Date());
+            if (!stoppingAlgo) {
+                stickmen = generateStickmen(slider.value() == 0 ? 1 : slider.value(), new Date());
 
-            if (localStorage.getItem("brainModel")) {
+                if (localStorage.getItem("brainModel")) {
 
-                stickmen.forEach((element, index) => {
-                    element.brain = JSON.parse(localStorage.getItem("brainModel"));
-                    if(index != 0) {
-                        NeuralNetwork.mutate(element.brain, 0.1);
-                    }
-                });
+                    stickmen.forEach((element, index) => {
+                        element.brain = JSON.parse(localStorage.getItem("brainModel"));
+                        if (index != 0) {
+                            NeuralNetwork.mutate(element.brain, 0.1);
+                        }
+                    });
+                }
+            } else {
+                stoppingAlgo = false;
+                genCount = 0;
+                modetext = "Idle";
+                saveLog();
+                saveModelObj();
+                discardModel();
             }
         }
 
@@ -187,6 +201,7 @@ function discardModel() {
 }
 
 function clickReset() {
+    discardModel();
     genCount = 0;
     modetext = "Idle";
 
@@ -219,6 +234,13 @@ function clickInference() {
 }
 
 function saveLog() {
-    writer.write(log);
+    writer = createWriter('Log.json');
+    writer.write(JSON.stringify(log));
+    writer.close();
+}
+
+function saveModelObj() {
+    writer = createWriter('Model.json');
+    writer.write(localStorage.getItem("brainModel"));
     writer.close();
 }
