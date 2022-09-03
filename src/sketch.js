@@ -143,7 +143,7 @@ function draw() {
 
         var alldead = stickmen.every(s => s.dead);
 
-        if (bestStickmanP1.xScore > 950) {
+        if (bestStickmanP2.xScore > 950) {
             alldead = true;
             if (bestStickmanP2 === bestStickmanP1) {
                 stoppingAlgo = true;

@@ -32,6 +32,26 @@ class NeuralNetwork {
             }
         });
     }
+
+    //cross over
+    static crossover(network1, network2) {
+        let newNetwork = network1;
+        newNetwork.layers.forEach((layer, index) => {
+            for (let i = 0; i < layer.biases.length; i++) {
+                if (index % 2 == 0) {
+                    layer.biases[i] = network2.layers[index].biases[i];
+                }
+            }
+            for (let i = 0; i < layer.weights.length; i++) {
+                for (let j = 0; j < layer.weights[i].length; j++) {
+                    if (index % 2 == 0) {
+                        layer.weights[i][j] = network2.layers[index].weights[i][j];
+                    }
+                }
+            }
+        });
+        return newNetwork;
+    }
 }
 
 class Layer {
