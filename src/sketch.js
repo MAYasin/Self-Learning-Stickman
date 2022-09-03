@@ -26,7 +26,6 @@ let h3;
 
 let stickmen;
 let genCount = 0;
-let bestStickman;
 
 let starttime;
 
@@ -35,7 +34,11 @@ let log = [];
 
 let stoppingAlgo;
 
-let brainModelStorage;
+let bestStickmanP1;
+let brainModelStorageP1;
+
+let bestStickmanP2;
+let brainModelStorageP2;
 
 function generateStickmen(count, time) {
     const stickmen = [];
@@ -43,7 +46,8 @@ function generateStickmen(count, time) {
         stickmen.push(new Ragdoll(80, height / 1.4, bounds, customOption, time, genCount));
     }
 
-    bestStickman = stickmen[0];
+    bestStickmanP1 = stickmen[0];
+    bestStickmanP2 = stickmen[0];
     return stickmen;
 }
 
@@ -130,16 +134,20 @@ function draw() {
     if (stickmen != null) {
 
         stickmen.forEach(stickman => stickman.resetTransparency());
-        bestStickman = stickmen.find(s => s.score == Math.max(...stickmen.map(s => s.score)));
-        bestStickman.setTransparency(255);
+        bestStickmanP1 = stickmen.find(s => s.xScore == Math.max(...stickmen.map(s => s.xScore)));
+        bestStickmanP2 = stickmen.find(s => s.yScore == Math.min(...stickmen.map(s => s.yScore)));
+        
+        bestStickmanP1.setTransparency(255);
 
         stickmen.forEach(stickman => stickman.update());
 
         var alldead = stickmen.every(s => s.dead);
 
-        if (bestStickman.score > 950) {
+        if (bestStickmanP1.xScore > 950) {
             alldead = true;
-            stoppingAlgo = true;
+            if (bestStickmanP2 === bestStickmanP1) {
+                stoppingAlgo = true;
+            }
         }
 
         if (alldead) {
@@ -151,13 +159,21 @@ function draw() {
             if (!stoppingAlgo) {
                 stickmen = generateStickmen(slider.value() == 0 ? 2 : slider.value(), new Date());
 
-                if (brainModelStorage!=undefined) {
+                if (brainModelStorageP1 != undefined && brainModelStorageP2 != undefined) {
+                    var stickmenCount = stickmen.length / 2;
                     stickmen.forEach((element, index) => {
-                        element.brain = JSON.parse(brainModelStorage);
-                        if (index != 0) {
-                            NeuralNetwork.mutate(element.brain, 0.9);
+                        if (index < stickmenCount) {
+                            element.brain = JSON.parse(brainModelStorageP1);
+                            if (index != 0) {
+                                NeuralNetwork.mutate(element.brain, 0.1);
+                            }
+                        } else {
+                            element.setColor(color(255, 255, 0));
+                            element.brain = JSON.parse(brainModelStorageP2);
+                            if (index != stickmenCount) {
+                                NeuralNetwork.mutate(element.brain, 0.1);
+                            }
                         }
-                        console.log(element.brain);
                     });
                 }
             } else {
@@ -188,16 +204,18 @@ function draw() {
 
 //html utils
 function saveModel() {
-    brainModelStorage =JSON.stringify(bestStickman.brain);
+    brainModelStorageP1 = JSON.stringify(bestStickmanP1.brain);
+    brainModelStorageP2 = JSON.stringify(bestStickmanP2.brain);
 
-    log.push(bestStickman.getLog());
+    log.push(bestStickmanP2.getLog());
 }
 
 function discardModel() {
-    brainModelStorage = undefined;
+    brainModelStorageP1 = undefined;
+    brainModelStorageP2 = undefined;
 }
 
-function resetModel(){
+function resetModel() {
     if (stickmen != null) {
         for (let i = 0; i < stickmen.length; i++) {
             stickmen[i].removeFromWorld();
@@ -218,7 +236,7 @@ function clickReset() {
 function clickTrain() {
     discardModel();
     genCount = 0;
-    
+
     resetModel();
 
     stickmen = generateStickmen(slider.value() == 0 ? 2 : slider.value(), new Date());
@@ -239,5 +257,6 @@ function saveLog() {
 
 function saveModelObj() {
     writer = createWriter('Model.json');
-    writer.write(brainModelStorage);
-    writer.close();}
+    writer.write(brainModelStorageP2);
+    writer.close();
+}

@@ -6,7 +6,8 @@ class Ragdoll {
         this.starttime = starttime;
         this.generation = generation;
         this.deathtime;
-        this.score = 0;
+        this.xScore = 0;
+        this.yScore = 0;
         this.brain = new NeuralNetwork([9, 8, 2]);
 
         this.torso = new Box(this.x, this.y, 20, 60, bounds, customOption);
@@ -85,6 +86,15 @@ class Ragdoll {
         this.lleg.transparency = alpha;
     }
 
+    setColor(color) {
+        this.torso.color = color;
+        this.head.color = color;
+        this.rhand.color = color;
+        this.lhand.color = color;
+        this.rleg.color = color;
+        this.lleg.color = color;
+    }
+
     resetTransparency() {
         if (this.torso.transparency != 150) {
             this.setTransparency(150);
@@ -107,7 +117,7 @@ class Ragdoll {
     }
 
     update() {
-        if (this.head.collided || this.torso.collided || this.kill(20)) {
+        if (this.head.collided || this.torso.collided || this.kill(40)) {
             this.dead = true;
 
             this.deadtime = new Date();
@@ -130,7 +140,8 @@ class Ragdoll {
         }
 
         if (!this.dead) {
-            this.score = this.torso.body.position.x - this.x;
+            this.xScore = this.torso.body.position.x - this.x;
+            this.yScore = this.torso.body.position.y;
             const outputs = NeuralNetwork.feedForward([roundTo(this.lleg.angle, 2), roundTo(this.lleg.angularSpeed, 2), this.lleg.collided ? 1 : 0, roundTo(this.lleg.distanceToGround, 2), roundTo(this.torso.angle, 2), roundTo(this.rleg.angle, 2), roundTo(this.rleg.angularSpeed, 2), this.rleg.collided ? 1 : 0, roundTo(this.rleg.distanceToGround, 2)], this.brain)
             //console.log(this.brain.layers[0].inputs);
             this.control(outputs[0], outputs[1]);
@@ -151,7 +162,7 @@ class Ragdoll {
     }
 
     getLog() {
-        return { "score": this.score, "time": (this.deadtime - this.starttime) / 1000, "generation": this.generation };
+        return { "xScore": this.xScore, "yScore": this.yScore, "time": (this.deadtime - this.starttime) / 1000, "generation": this.generation };
     }
 
     kill(seconds) {
