@@ -117,7 +117,7 @@ function setup() {
 
 //drawing the canvas
 function draw() {
-    h3.html(slider.value() == 0 ? 1 : slider.value());
+    h3.html(slider.value() == 0 ? 2 : slider.value());
     //Engine.update(engine)
     image(img, 0, 0);
     textSize(27);
@@ -148,7 +148,7 @@ function draw() {
             reset();
 
             if (!stoppingAlgo) {
-                stickmen = generateStickmen(slider.value() == 0 ? 1 : slider.value(), new Date());
+                stickmen = generateStickmen(slider.value() == 0 ? 2 : slider.value(), new Date());
 
                 if (localStorage.getItem("brainModel")) {
 
@@ -220,7 +220,7 @@ function clickTrain() {
     
     reset();
 
-    stickmen = generateStickmen(slider.value() == 0 ? 1 : slider.value(), new Date());
+    stickmen = generateStickmen(slider.value() == 0 ? 2 : slider.value(), new Date());
 
     modetext = "Training... " + stickmen.length + " stickmen";
 }
