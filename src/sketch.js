@@ -145,11 +145,7 @@ function draw() {
             genCount += 1;
 
             saveModel();
-            for (let i = 0; i < stickmen.length; i++) {
-                stickmen[i].removeFromWorld();
-            }
-
-            stickmen = undefined;
+            reset();
 
             if (!stoppingAlgo) {
                 stickmen = generateStickmen(slider.value() == 0 ? 1 : slider.value(), new Date());
@@ -200,11 +196,7 @@ function discardModel() {
     localStorage.removeItem("brainModel");
 }
 
-function clickReset() {
-    discardModel();
-    genCount = 0;
-    modetext = "Idle";
-
+function reset(){
     if (stickmen != null) {
         for (let i = 0; i < stickmen.length; i++) {
             stickmen[i].removeFromWorld();
@@ -214,14 +206,19 @@ function clickReset() {
     stickmen = undefined;
 }
 
-function clickTrain() {
+function clickReset() {
+    discardModel();
     genCount = 0;
-    if (stickmen != null) {
-        for (let i = 0; i < stickmen.length; i++) {
-            stickmen[i].removeFromWorld();
-        }
-    }
-    stickmen = undefined;
+    modetext = "Idle";
+
+    reset();
+}
+
+function clickTrain() {
+    discardModel();
+    genCount = 0;
+    
+    reset();
 
     stickmen = generateStickmen(slider.value() == 0 ? 1 : slider.value(), new Date());
 
