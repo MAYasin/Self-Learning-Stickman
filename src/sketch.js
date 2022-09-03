@@ -35,6 +35,7 @@ let log = [];
 
 let stoppingAlgo;
 
+let brainModelStorage;
 
 function generateStickmen(count, time) {
     const stickmen = [];
@@ -145,18 +146,18 @@ function draw() {
             genCount += 1;
 
             saveModel();
-            reset();
+            resetModel();
 
             if (!stoppingAlgo) {
                 stickmen = generateStickmen(slider.value() == 0 ? 2 : slider.value(), new Date());
 
-                if (localStorage.getItem("brainModel")) {
-
+                if (brainModelStorage!=undefined) {
                     stickmen.forEach((element, index) => {
-                        element.brain = JSON.parse(localStorage.getItem("brainModel"));
+                        element.brain = JSON.parse(brainModelStorage);
                         if (index != 0) {
-                            NeuralNetwork.mutate(element.brain, 0.1);
+                            NeuralNetwork.mutate(element.brain, 0.9);
                         }
+                        console.log(element.brain);
                     });
                 }
             } else {
@@ -187,16 +188,16 @@ function draw() {
 
 //html utils
 function saveModel() {
-    localStorage.setItem("brainModel", JSON.stringify(bestStickman.brain));
+    brainModelStorage =JSON.stringify(bestStickman.brain);
 
     log.push(bestStickman.getLog());
 }
 
 function discardModel() {
-    localStorage.removeItem("brainModel");
+    brainModelStorage = undefined;
 }
 
-function reset(){
+function resetModel(){
     if (stickmen != null) {
         for (let i = 0; i < stickmen.length; i++) {
             stickmen[i].removeFromWorld();
@@ -211,14 +212,14 @@ function clickReset() {
     genCount = 0;
     modetext = "Idle";
 
-    reset();
+    resetModel();
 }
 
 function clickTrain() {
     discardModel();
     genCount = 0;
     
-    reset();
+    resetModel();
 
     stickmen = generateStickmen(slider.value() == 0 ? 2 : slider.value(), new Date());
 
@@ -238,6 +239,5 @@ function saveLog() {
 
 function saveModelObj() {
     writer = createWriter('Model.json');
-    writer.write(localStorage.getItem("brainModel"));
-    writer.close();
-}
+    writer.write(brainModelStorage);
+    writer.close();}
