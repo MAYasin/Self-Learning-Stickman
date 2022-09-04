@@ -30,13 +30,14 @@ let genCount = 0;
 let starttime;
 
 let writer;
-let log = [];
 
 let stoppingAlgo;
 
+let logP1 = [];
 let bestStickmanP1;
 let brainModelStorageP1;
 
+let logP2 = [];
 let bestStickmanP2;
 let brainModelStorageP2;
 
@@ -135,60 +136,69 @@ function draw() {
     text(gentext, 850, 40);
 
     if (stickmen != null) {
+        if (modetext != "Inference") {
+            stickmen.forEach(stickman => stickman.resetTransparency());
+            bestStickmanP1 = stickmen.find(s => s.xScore == Math.max(...stickmen.map(s => s.xScore)));
+            bestStickmanP2 = stickmen.find(s => s.yScore == Math.min(...stickmen.map(s => s.yScore)));
 
-        stickmen.forEach(stickman => stickman.resetTransparency());
-        bestStickmanP1 = stickmen.find(s => s.xScore == Math.max(...stickmen.map(s => s.xScore)));
-        bestStickmanP2 = stickmen.find(s => s.yScore == Math.min(...stickmen.map(s => s.yScore)));
-        
-        bestStickmanP1.setTransparency(255);
+            bestStickmanP1.setTransparency(255);
 
-        stickmen.forEach(stickman => stickman.update());
+            stickmen.forEach(stickman => stickman.update());
 
-        var alldead = stickmen.every(s => s.dead);
+            var alldead = stickmen.every(s => s.dead || s.yScore > 455);
 
-        if (bestStickmanP2.xScore > 950) {
-            alldead = true;
-            if (bestStickmanP2 === bestStickmanP1) {
-                stoppingAlgo = true;
-            }
-        }
-
-        if (alldead) {
-            genCount += 1;
-
-            saveModel();
-            resetModel();
-
-            if (!stoppingAlgo) {
-                stickmen = generateStickmen(slider.value() == 0 ? 2 : slider.value(), new Date());
-
-                if (brainModelStorageP1 != undefined && brainModelStorageP2 != undefined) {
-                    var stickmenCount = stickmen.length / 2;
-                    stickmen.forEach((element, index) => {
-                        if (index < stickmenCount) {
-                            element.brain = JSON.parse(brainModelStorageP1);
-                            if (index != 0) {
-                                NeuralNetwork.mutate(element.brain, 0.1);
-                            }
-                        } else {
-                            element.setColor(color(255, 255, 0));
-                            element.brain = NeuralNetwork.crossover(JSON.parse(brainModelStorageP1), JSON.parse(brainModelStorageP2));
-                            if (index != stickmenCount) {
-                                NeuralNetwork.mutate(element.brain, 0.1);
-                            }
-                        }
-                    });
+            if (bestStickmanP1.xScore > 950) {
+                alldead = true;
+                if (bestStickmanP1.yScore < 450) {
+                    stoppingAlgo = true;
                 }
-            } else {
-                stoppingAlgo = false;
-                genCount = 0;
-                modetext = "Idle";
-                saveLog();
-                saveModelObj();
-                discardModel();
+            }
+
+            if (alldead) {
+                genCount += 1;
+
+                saveModel();
+                resetModel();
+
+                if (!stoppingAlgo) {
+                    stickmen = generateStickmen(slider.value() == 0 ? 2 : slider.value(), new Date());
+
+                    if (brainModelStorageP1 != undefined && brainModelStorageP2 != undefined) {
+                        var stickmenCount = stickmen.length / 2;
+                        stickmen.forEach((element, index) => {
+                            if (index < stickmenCount) {
+                                element.brain = NeuralNetwork.crossover(JSON.parse(brainModelStorageP2), JSON.parse(brainModelStorageP1));
+                                if (index != 0) {
+                                    NeuralNetwork.mutate(element.brain, 0.01);
+                                }
+                            } else {
+                                element.setColor(color(255, 255, 0));
+                                element.brain = NeuralNetwork.crossover(JSON.parse(brainModelStorageP1), JSON.parse(brainModelStorageP2));
+                                if (index != stickmenCount) {
+                                    NeuralNetwork.mutate(element.brain, 0.01);
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    stoppingAlgo = false;
+                    genCount = 0;
+                    modetext = "Idle";
+                    saveLog();
+                    saveModelObj();
+                    discardModel();
+                }
+            }
+        }else{
+            stickmen[0].update();
+            if (stickmen[0].xScore > 950) {
+                stickmen[0].dead = true;
+            }
+
+            if (stickmen[0].dead) {
+                clickInference();
             }
         }
-
     }
 
     gentext = "Gen: " + (stickmen == null ? "undefined" : genCount);
@@ -210,7 +220,8 @@ function saveModel() {
     brainModelStorageP1 = JSON.stringify(bestStickmanP1.brain);
     brainModelStorageP2 = JSON.stringify(bestStickmanP2.brain);
 
-    log.push(bestStickmanP2.getLog());
+    logP1.push(bestStickmanP1.getLog());
+    logP2.push(bestStickmanP2.getLog());
 }
 
 function discardModel() {
@@ -254,10 +265,13 @@ function clickInference() {
 
     stickmen = generateStickmen(1, new Date());
     stickmen[0].brain = JSON.parse(loadModel);
+    stickmen[0].setTransparency(255);
+    stickmen[0].inferenceMode = true;
 }
 
 function saveLog() {
     writer = createWriter('Log.json');
+    var log = {"p1": logP1, "p2": logP2};
     writer.write(JSON.stringify(log));
     writer.close();
 }

@@ -17,6 +17,8 @@ class Ragdoll {
         this.rleg = new Box(this.x + 10, this.y + 50, 8, 40, bounds, customOption);
         this.lleg = new Box(this.x - 10, this.y + 50, 8, 40, bounds, customOption);
 
+        this.inferenceMode = false;
+
         this.torsoToHead = Constraint.create({
             bodyA: this.torso.body,
             bodyB: this.head.body,
@@ -142,7 +144,7 @@ class Ragdoll {
         if (!this.dead) {
             this.xScore = this.torso.body.position.x - this.x;
             this.yScore = this.torso.body.position.y;
-            if(this.yScore < 440){
+            if(this.yScore < 438){
                 this.yScore = 0;
             }
             const outputs = NeuralNetwork.feedForward([roundTo(this.lleg.angle, 2), roundTo(this.lleg.angularSpeed, 2), this.lleg.collided ? 1 : 0, roundTo(this.lleg.distanceToGround, 2), roundTo(this.torso.angle, 2), roundTo(this.rleg.angle, 2), roundTo(this.rleg.angularSpeed, 2), this.rleg.collided ? 1 : 0, roundTo(this.rleg.distanceToGround, 2)], this.brain)
@@ -171,7 +173,7 @@ class Ragdoll {
     kill(seconds) {
         var time = new Date();
         var kill = ((time.getTime() - this.starttime.getTime()) / 1000) >= seconds;
-        if (kill) {
+        if (kill && !this.inferenceMode) {
             this.dead = true;
             return true;
         }
