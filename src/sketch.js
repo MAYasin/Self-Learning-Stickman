@@ -261,7 +261,7 @@ function clickTrain() {
 function clickInference() {
     resetModel();
     modetext = "Inference";
-    genCount = 12;
+    genCount = undefined;
 
     stickmen = generateStickmen(1, new Date());
     stickmen[0].brain = JSON.parse(loadModel);
