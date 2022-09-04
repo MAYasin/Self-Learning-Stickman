@@ -40,6 +40,8 @@ let brainModelStorageP1;
 let bestStickmanP2;
 let brainModelStorageP2;
 
+let loadModel;
+
 function generateStickmen(count, time) {
     const stickmen = [];
     for (let i = 0; i < count; i++) {
@@ -54,6 +56,7 @@ function generateStickmen(count, time) {
 //preload resources
 function preload() {
     img = loadImage("assets/landscape.jpg");
+    loadModel = loadStrings('assets/Model.json');
 }
 
 //initialisation of the sketch
@@ -169,7 +172,7 @@ function draw() {
                             }
                         } else {
                             element.setColor(color(255, 255, 0));
-                            element.brain = JSON.parse(brainModelStorageP2);
+                            element.brain = NeuralNetwork.crossover(JSON.parse(brainModelStorageP1), JSON.parse(brainModelStorageP2));
                             if (index != stickmenCount) {
                                 NeuralNetwork.mutate(element.brain, 0.1);
                             }
@@ -245,8 +248,12 @@ function clickTrain() {
 }
 
 function clickInference() {
+    resetModel();
     modetext = "Inference";
-    gentext = "Gen: 1000";
+    genCount = 12;
+
+    stickmen = generateStickmen(1, new Date());
+    stickmen[0].brain = JSON.parse(loadModel);
 }
 
 function saveLog() {
