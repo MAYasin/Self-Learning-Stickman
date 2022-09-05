@@ -167,7 +167,7 @@ function draw() {
                         var stickmenCount = stickmen.length / 2;
                         stickmen.forEach((element, index) => {
                             if (index < stickmenCount) {
-                                element.brain = NeuralNetwork.crossover(JSON.parse(brainModelStorageP2), JSON.parse(brainModelStorageP1));
+                                element.brain = JSON.parse(brainModelStorageP1);
                                 if (index != 0) {
                                     NeuralNetwork.mutate(element.brain, 0.01);
                                 }

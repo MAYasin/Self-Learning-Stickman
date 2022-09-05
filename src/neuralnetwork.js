@@ -38,12 +38,12 @@ class NeuralNetwork {
         let newNetwork = network1;
         newNetwork.layers.forEach((layer, index) => {
             for (let i = 0; i < layer.biases.length; i++) {
-                if (i % 2 == 0) {
+                if (Math.random() < 0.5) {
                     layer.biases[i] = network2.layers[index].biases[i];
                 }
             }
             for (let i = 0; i < layer.weights.length; i++) {
-                if (i % 2 == 0) {
+                if (Math.random() < 0.5) {
                     layer.weights[i] = network2.layers[index].weights[i];
                 }
             }
