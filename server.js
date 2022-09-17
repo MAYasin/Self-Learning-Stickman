@@ -11,3 +11,5 @@ console.log("sever running");
 console.log("http://localhost:3000/");
 
 reload(app);
+
+module.exports = app;
