@@ -1,8 +1,8 @@
-var express = require('express');
-var reload = require('reload');
+const express = require('express');
+const reload = require('reload');
+const path = require('path');
 
-var app = express();
-var sever = app.listen(process.env.PORT || 3000);
+const app = express();
 
 app.use(express.static('src'));
 
@@ -15,5 +15,7 @@ console.log("sever running");
 console.log("http://localhost:3000/");
 
 reload(app);
+
+app.listen(process.env.PORT || 3000);
 
 module.exports = app;
