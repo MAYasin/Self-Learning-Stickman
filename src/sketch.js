@@ -1,7 +1,7 @@
 // module aliases
 var Engine = Matter.Engine,
     Runner = Matter.Runner,
-    Render = Matter.Render,
+    // Render = Matter.Render,
     Bodies = Matter.Bodies,
     Body = Matter.Body,
     Common = Matter.Common,
@@ -78,20 +78,20 @@ function setup() {
     engine = Engine.create();
 
     //creating the renderer
-    var render = Render.create({
-        element: document.body,
-        engine: engine,
-        options: {
-            width: 1100,
-            height: 600,
-            showAngleIndicator: true
-        }
-    });
+    // var render = Render.create({
+    //     element: document.body,
+    //     engine: engine,
+    //     options: {
+    //         width: 1100,
+    //         height: 600,
+    //         showAngleIndicator: true
+    //     }
+    // });
 
     world = engine.world;
 
     // run the renderer
-    Render.run(render);
+    // Render.run(render);
 
     runner = Runner.create();
     Runner.run(runner, engine);
